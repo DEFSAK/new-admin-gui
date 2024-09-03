@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.defsak.admingoowee
 productName: admingoowee-vanilla-ts
 directories:
   buildResources: build
@@ -13,6 +13,8 @@ asarUnpack:
   - resources/**
 win:
   executableName: admingoowee-vanilla-ts
+  publish:
+    provider: github
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -40,6 +42,6 @@ appImage:
 npmRebuild: false
 publish:
   provider: generic
-  url: https://example.com/auto-updates
+  url: https://github.com/DEFSAK/new-admin-gui
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

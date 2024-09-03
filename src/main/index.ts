@@ -7,10 +7,10 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import clipboardWatcher from 'electron-clipboard-watcher'
 import icon from '../../resources/icon.png?asset'
 import auth_controller from '../auth/controller'
+import { autoUpdater } from 'electron-updater'
 import settings from 'electron-settings'
 import { join } from 'path'
 import fs from 'fs'
-
 const KeyboardListener = new GlobalKeyboardListener()
 
 async function doAuthLogin(): Promise<void> {
@@ -317,6 +317,8 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 app.on('window-all-closed', () => {
