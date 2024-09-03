@@ -1,0 +1,34 @@
+.badges {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  display: flex;
+  margin-left: 5px;
+}
+
+.badge.admin {
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml, %3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' stroke=''%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M9 12L11 14L15 9.99999M20 12C20 16.4611 14.54 19.6937 12.6414 20.683C12.4361 20.79 12.3334 20.8435 12.191 20.8712C12.08 20.8928 11.92 20.8928 11.809 20.8712C11.6666 20.8435 11.5639 20.79 11.3586 20.683C9.45996 19.6937 4 16.4611 4 12V8.21759C4 7.41808 4 7.01833 4.13076 6.6747C4.24627 6.37113 4.43398 6.10027 4.67766 5.88552C4.9535 5.64243 5.3278 5.50207 6.0764 5.22134L11.4382 3.21067C11.6461 3.13271 11.75 3.09373 11.857 3.07827C11.9518 3.06457 12.0482 3.06457 12.143 3.07827C12.25 3.09373 12.3539 3.13271 12.5618 3.21067L17.9236 5.22134C18.6722 5.50207 19.0465 5.64243 19.3223 5.88552C19.566 6.10027 19.7537 6.37113 19.8692 6.6747C20 7.01833 20 7.41808 20 8.21759V12Z' stroke='%2332CD32' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.badge.veteran {
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M13.5 5.25H10.5H9H5.25V9.31066L8.33194 12.3926C7.80809 13.1282 7.5 14.0281 7.5 15C7.5 17.4853 9.51472 19.5 12 19.5C14.4853 19.5 16.5 17.4853 16.5 15C16.5 14.0281 16.1919 13.1282 15.6681 12.3926L18.75 9.31066V5.25H15H13.5ZM13.5 6.75H10.5V10.7561C10.9692 10.5902 11.474 10.5 12 10.5C12.526 10.5 13.0308 10.5902 13.5 10.7561V6.75ZM15 10.9393L17.25 8.68934V6.75H15V10.9393ZM6.75 6.75H9V10.9393L6.75 8.68934V6.75ZM9 15C9 13.3431 10.3431 12 12 12C13.6569 12 15 13.3431 15 15C15 16.6569 13.6569 18 12 18C10.3431 18 9 16.6569 9 15Z' fill='%230096FF'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-size: 24px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.badge.suspicious {
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='SVGRepo_bgCarrier' stroke-width='0'%3E%3C/g%3E%3Cg id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'%3E%3C/g%3E%3Cg id='SVGRepo_iconCarrier'%3E%3Cpath d='M4 21V18.5C4 15.4624 6.46243 13 9.5 13H15M8 21V18M16.5 17V15M16.5 19.2V19M16 6.5C16 8.70914 14.2091 10.5 12 10.5C9.79086 10.5 8 8.70914 8 6.5C8 4.29086 9.79086 2.5 12 2.5C14.2091 2.5 16 4.29086 16 6.5ZM12.309 21H20.691C21.0627 21 21.3044 20.6088 21.1382 20.2764L16.9472 11.8944C16.763 11.5259 16.237 11.5259 16.0528 11.8944L11.8618 20.2764C11.6956 20.6088 11.9373 21 12.309 21Z' stroke='%23FFBF00' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.4'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}

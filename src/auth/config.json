@@ -1,0 +1,7 @@
+{
+  "client_id": "3e06062b-6481-4285-ae06-76fa0e97289e",
+  "redirect_uri": "http://localhost:3000/callback",
+  "base_url": "https://chivvyusers.b2clogin.com",
+  "authorize_endpoint": "/chivvyusers.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN/oauth2/v2.0/authorize",
+  "token_endpoint": "/chivvyusers.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN/oauth2/v2.0/token"
+}

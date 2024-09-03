@@ -1,0 +1,85 @@
+#local-ban-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+#local-ban-modal.hide {
+  display: none;
+}
+
+#local-ban-content {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  padding-top: 48px;
+}
+
+#local-ban-content input {
+  width: calc(100% - 20px);
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  padding-left: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.875 3.32031H15.7031C15.6172 3.32031 15.5469 3.39062 15.5469 3.47656V13.5938H6.0547V12.168C6.0547 12.0371 5.90236 11.9629 5.8008 12.0449L3.02931 14.2324C3.01064 14.247 2.99553 14.2657 2.98515 14.287C2.97476 14.3084 2.96936 14.3318 2.96936 14.3555C2.96936 14.3792 2.97476 14.4026 2.98515 14.4239C2.99553 14.4452 3.01064 14.4639 3.02931 14.4785L5.8008 16.666C5.90431 16.748 6.0547 16.6738 6.0547 16.543V15.0781H15.7813C16.4707 15.0781 17.0313 14.5176 17.0313 13.8281V3.47656C17.0313 3.39062 16.961 3.32031 16.875 3.32031Z' fill='white'/%3E%3C/svg%3E%0A");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 11px) center;
+}
+
+#local-ban-content button:not(#local-ban-modal-close) {
+  width: 100%;
+  height: 44px;
+  background-color: #000;
+  border: 0;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#local-ban-content button:hover:not(#local-ban-modal-close) {
+  background-color: #fff;
+  color: #000;
+}
+
+#local-ban-modal-close {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+#local-ban-modal-close #local-ban-modal-close-svg {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

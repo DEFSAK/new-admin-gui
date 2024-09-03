@@ -1,0 +1,110 @@
+#table-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+#table-controls #tc-left,
+#table-controls #tc-right {
+  display: flex;
+  align-items: center;
+}
+
+#table-controls #tc-left #player-count {
+  color: #fff;
+  font-size: 16pt;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+#table-controls #tc-right #punish-reason,
+#table-controls #tc-right #punish-duration {
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  padding-left: 16px;
+  height: 32px;
+  font-size: 12pt;
+  color: #fff;
+}
+
+#table-controls #tc-right #punish-reason {
+  width: 160px;
+  max-width: calc(160px - 16px);
+}
+
+#table-controls #tc-right #punish-duration {
+  max-width: calc(98px - 16px);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+#table-controls #tc-right #punish-preset-button {
+  line-height: 0;
+  margin-right: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background-color: rgba(20, 29, 62, 0.25);
+  border: 1px solid #4265e0;
+  border-radius: 4px;
+  color: #fff;
+
+  --preset-icon-hover: #4a72ff;
+}
+
+#punish-preset-button.enabled {
+  border-radius: 0 4px 4px 0 !important;
+}
+
+#table-controls #tc-right #punish-preset-button:hover {
+  --preset-icon-hover: white;
+  background-color: #4265e0;
+}
+
+#table-controls #tc-right #punish-preset-button #preset-icon path {
+  fill: var(--preset-icon-hover);
+}
+
+#table-controls #tc-left #refresh-button {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(18, 56, 22, 0.25);
+  border: 1px solid #298231;
+  border-radius: 4px;
+  color: #fff;
+  line-height: 0;
+  cursor: pointer;
+
+  --refresh-icon-hover: #67d172;
+}
+
+#table-controls #tc-left #refresh-button:hover {
+  --refresh-icon-hover: white;
+  background-color: #298231;
+}
+
+#table-controls #tc-left #refresh-button #refresh-icon path {
+  stroke: var(--refresh-icon-hover);
+}
+
+#punish-duration-slider {
+  margin-left: 16px;
+  margin-right: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #4265e0;
+  outline: none;
+  border-radius: 8px;
+  height: 4px;
+}
+
+#punish-duration-label {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12pt;
+  font-weight: 500;
+  margin-right: 8px;
+  text-align: right;
+  width: 64px;
+}

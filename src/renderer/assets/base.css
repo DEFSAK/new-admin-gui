@@ -1,0 +1,130 @@
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap);
+@import 'css/local-ban-modal.css';
+@import 'css/settings-modal.css';
+@import 'css/table-controls.css';
+@import 'css/tour-dialog.css';
+@import 'css/table-misc.css';
+@import 'css/tooltip.css';
+@import 'css/badges.css';
+@import 'css/table.css';
+
+* {
+  font-family: 'Inter', sans-serif;
+  transition: all 250ms ease;
+
+  --tag-bg: rgba(0, 0, 0, 0.5);
+  --tag-hover: rgba(0, 0, 0, 0.75);
+  --tag-text-color: white;
+  --tag-remove-bg: #6b1919;
+  --tag-remove-btn-color: white;
+  --placeholder-color: rgba(255, 255, 255, 0.4);
+  --tag-pad: 4px 1px;
+}
+
+body {
+  background-image: url('img/bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  overflow: hidden;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+body.pre-init {
+  visibility: hidden;
+}
+
+:focus {
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(74, 114, 255, 0.35);
+  border-radius: 5px;
+}
+
+input:focus:not(#message-input) {
+  box-shadow: 0 0 10px rgba(74, 114, 255, 0.1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.tagify {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(0, 0, 0, 0.25) !important;
+  border-radius: 4px 0 0 4px !important;
+  height: 32px !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 300px;
+}
+
+.tagify::-webkit-scrollbar {
+  display: none;
+}
+
+.tagify.tagify--empty:not(.tagify--focus) {
+  opacity: 0 !important;
+}
+
+.tagify__input {
+  display: none !important;
+}
+
+.tagify__tag {
+  height: 28px !important;
+  margin: 0 !important;
+  margin-top: 1px !important;
+  margin-inline: 4px !important;
+  padding-inline: 4px !important;
+}
+
+.tagify__tag > div > span {
+  white-space: nowrap !important;
+  justify-content: center !important;
+  color: white !important;
+}
+
+.tagify__dropdown {
+  border: none !important;
+  border-radius: 4px !important;
+}
+
+.tagify__dropdown__wrapper {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid black !important;
+  border-radius: 4px !important;
+}
+
+.tagify__dropdown__item {
+  color: white !important;
+}
+
+.tagify__dropdown__item--active {
+  background-color: transparent !important;
+}
+
+.tagify__dropdown__header {
+  display: none !important;
+}
+
+.tagify__dropdown__footer {
+  color: white !important;
+}

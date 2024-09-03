@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin GooWee</title>
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <!-- <meta http-equiv="Content-Security-Policy" -->
+  <!-- content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:" /> -->
+  <link rel="stylesheet" href="assets/base.css" />
+</head>
+
+<body class="pre-init">
+  <!-- TABLE CONTROLS -->
+  <div id="table-controls">
+    <div id="tc-left">
+      <button id="refresh-button" data-tg-order="1" data-tg-title="Refresh Button"
+        data-tg-tour="The refresh button will run the 'listplayers' command in your game console and fill the table below with data fetched from the SAK database.">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" id="refresh-icon">
+          <path stroke="#67D172" strokeLinecap="round" strokeLinejoin="round"
+            d="M5.23706 5.79032h-3.75m0 0v-3.75m0 3.75 2.65169-2.65168c.96148-.96148 2.18649-1.61626 3.52011-1.88154 1.33362-.265269 2.71594-.12912 3.97224.39123 1.2562.52035 2.3299 1.40154 3.0854 2.53213.7554 1.13059 1.1586 2.4598 1.1586 3.81954 0 1.35975-.4032 2.689-1.1586 3.8196-.7555 1.1305-1.8292 2.0117-3.0854 2.5321-1.2563.5203-2.63862.6565-3.97224.3912-1.33362-.2653-2.55863-.92-3.52011-1.8815" />
+        </svg>
+      </button>
+      <p id="player-count" data-tg-order="2" data-tg-title="Player Count"
+        data-tg-tour="Here displays the amount of players in the table.">Players
+        (0)</p>
+    </div>
+    <div id="tc-right">
+      <input type="text" id="punish-global" type="text">
+      <button id="punish-preset-button" data-tg-order="3" data-tg-title="Global Ban/Kick Catalogue"
+        data-tg-tour="Here you can select ban reasons from the catalogue to apply in a global ban.">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" id="preset-icon">
+          <path
+            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
+        </svg>
+      </button>
+      <!-- <input type="text" id="punish-reason" type="text" placeholder="Ban Message"> -->
+      <!-- <input type="number" id="punish-duration" min="1" max="999999" placeholder="Duration" data-tg-order="4"
+        data-tg-title="Ban/Kick Duration"
+        data-tg-tour="Here you can enter a ban duration for local bans. Use hours, e.g. banning someone for '24' means they'll be banned for 1 day."> -->
+      <input type="range" min="1" value="1" max="999999" id="punish-duration-slider" data-tg-order="4"
+        data-tg-title="Global Ban Duration Slider"
+        data-tg-tour="Here you can choose between the min and max ban times for your selected charges." />
+      <input type="number" min="1" value="1" max="999999" id="punish-duration-label" data-tg-order="5"
+        data-tg-title="Global Ban Duration Number"
+        data-tg-tour="Here you can manually type the time instead of using the slider if you want." />
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div id="table">
+    <div id="header">
+      <div class="col" id="name">
+        <label class="custom-checkbox-container" data-tg-order="6" data-tg-title="Header Checkbox"
+          data-tg-tour="De/Selects every entry in the table.">
+          <input type="checkbox" class="custom-checkbox">
+          <span class="custom-checkbox-icon"></span>
+        </label>
+        Name
+        <input type="text" placeholder="Search" id="header-search" data-tg-order="7" data-tg-title="Header Search"
+          data-tg-tour="Filter table entries by name.">
+      </div>
+      <div class="col" id="playfab">PlayFabPlayerID</div>
+      <div class="col" id="actions-header"></div>
+      <div id="header-sort">
+        <button id="table-sort-button" data-tg-order="8" data-tg-title="Header Sort"
+          data-tg-tour="Here you can sort the table in the following order (via Badges): Suspicous, Normal, Veteran, Admin"></button>
+      </div>
+    </div>
+    <div id="body">
+      <div id="table-loading">
+        <div id="table-loading-spinner"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- TABLE MISC COMPONENTS -->
+  <div id="table-misc">
+    <div id="misc-top">
+      <button id="settings-button" data-tg-order="9" data-tg-title="Settings Button"
+        data-tg-tour="Here you can edit your user settings or re-do this tour!">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" id="settings-icon">
+          <g fill="#fff" clipPath="url(#a)">
+            <path
+              d="M10.0555 6.11111c-2.16665 0-3.88887 1.72222-3.88887 3.88889 0 2.1667 1.72222 3.8889 3.88887 3.8889 2.1667 0 3.8889-1.7222 3.8889-3.8889 0-2.16667-1.7222-3.88889-3.8889-3.88889Zm0 6.66669c-1.55554 0-2.77776-1.2222-2.77776-2.7778 0-1.55556 1.22222-2.77778 2.77776-2.77778 1.5556 0 2.7778 1.22222 2.7778 2.77778 0 1.5556-1.2222 2.7778-2.7778 2.7778Z" />
+            <path
+              d="m18.2222 8.16667-1.5556-.5-.3333-.83333.7778-1.44445c.1667-.33333.1111-.77778-.1667-1.05555L15.6111 3c-.2778-.27777-.7222-.33333-1.0556-.16666l-1.4444.77777-.8333-.33333-.5-1.55555c-.1112-.33334-.4445-.61112-.8334-.61112H9.05553c-.38889 0-.72222.27778-.77778.66667l-.5 1.55556c-.33333.05555-.61111.16666-.88889.33333l-1.44444-.77778c-.33334-.16666-.77778-.11111-1.05556.16667L3.05553 4.38889c-.27778.27778-.33333.72222-.16667 1.05556l.72222 1.38889c-.11111.27777-.22222.61111-.33333.88889l-1.55555.5c-.33334.11111-.61112.44444-.61112.83333v1.88884c0 .3889.27778.7223.66667.8334l1.55556.5.33333.8333-.77778 1.4445c-.16666.3333-.11111.7777.16667 1.0555l1.33333 1.3333c.27778.2778.72222.3334 1.05556.1667l1.44444-.7778.83334.3334.5 1.6111c.11111.3333.44444.6111.83333.6111h1.88887c.3889 0 .7222-.2778.8334-.6111l.5-1.6111.8333-.3334 1.4444.7778c.3334.1667.7778.1111 1.0556-.1667l1.3333-1.3333c.2778-.2778.3334-.7222.1667-1.0555l-.7778-1.4445.3333-.8333 1.6112-.5c.3333-.1111.6111-.4445.6111-.8334V9.05556c0-.38889-.2778-.77778-.6667-.88889Zm-.4444 2.61113-2 .6111-.0556.2778-.5 1.1666-.1667.2778 1 1.8333-1.1111 1.1112-1.8333-1-.2778.1666c-.3889.2222-.7778.3889-1.1667.5l-.2777.0556-.6111 2H9.2222l-.61112-2-.27777-.0556-1.16667-.5-.27778-.1666-1.83333 1-1.11111-1.1112 1-1.8333-.16667-.2778c-.22222-.3889-.38889-.7777-.5-1.1666l-.05555-.2778-2-.6111V9.22223l1.88888-.55556.11112-.27778c.11111-.44444.27777-.83333.5-1.22222l.16666-.27778-.94444-1.83333 1.11111-1.11111 1.77778 1 .27777-.16667c.38889-.22222.77778-.38889 1.22223-.5l.27777-.11111.61112-1.94444h1.5556l.6111 1.94444.2777.11111c.3889.11111.7778.27778 1.1667.5l.2778.16667 1.8333-1 1.1111 1.11111-1 1.83333.1667.27778c.2222.38889.3889.77778.5 1.16667l.0556.27777 2 .61112v1.55557Z" />
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M0 0h20v20H0z" />
+            </clipPath>
+          </defs>
+        </svg>
+      </button>
+      <div id="message-container">
+        <input type="text" placeholder="Enter Message" id="message-input" data-tg-order="10"
+          data-tg-title="Message Input"
+          data-tg-tour="Here you can enter a message to send via the admin/server say command.">
+        <button id="message-send-button" data-tg-order="12" data-tg-title="Message Send Button"
+          data-tg-tour="Click here to submit your message.">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" fill="none" id="send-icon">
+            <path fill="#999"
+              d="m1.4 17.4 17.45-7.48c.1804-.07684.3342-.20502.4423-.3686.1081-.16357.1658-.35532.1658-.5514 0-.19607-.0577-.38782-.1658-.5514-.1081-.16357-.2619-.29175-.4423-.3686L1.4.600002C1.2489.534097 1.08377.506845.919509.520705.755246.534566.597018.589102.459098.679394.321179.769687.207908.892895.129505 1.0379c-.0784041.14501-.119474.30726-.11950501.4721L0 6.12c0 .5.37.93.87.99L15 9 .87 10.88c-.5.07-.87.5-.87 1l.00999999 4.61c0 .71.73000001 1.2 1.39000001.91Z" />
+          </svg>
+        </button>
+        <div id="message-dropdown">
+          <div id="message-dropdown-text" data-tg-order="11" data-tg-title="Message Type Dropdown"
+            data-tg-tour="Here you can select whether you want to send an admin or server say message.">Server</div>
+          <div id="message-dropdown-items">
+            <div class="message-dropdown-item" role="button">Admin</div>
+            <div class="message-dropdown-item" role="button">Server</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="misc-bottom">
+      <input type="text" placeholder="ID" id="unban-input" data-tg-order="13" data-tg-title="Unban Input"
+        data-tg-tour="Enter a PlayFabPlayerID to unban in here.">
+      <button id="unban-button" data-tg-order="14" data-tg-title="Unban Button"
+        data-tg-tour="Click here to unban the PlayFabPlayerID you entered in the input.">Unban</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal-overlay" class="hidden">
+    <div id="settings-modal" class="hidden">
+      <p id="settings-modal-title">User Settings</p>
+      <button id="settings-modal-close-button">
+        <svg id="modal-close-button-svg" width="32" height="32" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M26.0612 23.9387C26.343 24.2205 26.5013 24.6027 26.5013 25.0012C26.5013 25.3997 26.343 25.7819 26.0612 26.0637C25.7794 26.3455 25.3972 26.5038 24.9987 26.5038C24.6002 26.5038 24.218 26.3455 23.9362 26.0637L15.9999 18.125L8.0612 26.0612C7.7794 26.343 7.39721 26.5013 6.9987 26.5013C6.60018 26.5013 6.21799 26.343 5.9362 26.0612C5.6544 25.7794 5.49609 25.3972 5.49609 24.9987C5.49609 24.6002 5.6544 24.218 5.9362 23.9362L13.8749 16L5.9387 8.06122C5.6569 7.77943 5.49859 7.39724 5.49859 6.99872C5.49859 6.60021 5.6569 6.21802 5.9387 5.93622C6.22049 5.65443 6.60268 5.49612 7.0012 5.49612C7.39971 5.49612 7.7819 5.65443 8.0637 5.93622L15.9999 13.875L23.9387 5.93497C24.2205 5.65318 24.6027 5.49487 25.0012 5.49487C25.3997 5.49487 25.7819 5.65318 26.0637 5.93497C26.3455 6.21677 26.5038 6.59896 26.5038 6.99747C26.5038 7.39599 26.3455 7.77818 26.0637 8.05998L18.1249 16L26.0612 23.9387Z"
+            fill="white" />
+        </svg>
+      </button>
+      <div id="settings-modal-content">
+        <input type="text" placeholder="Webhook URL (Optional)" id="settings-webhook-url">
+        <button id="settings-console-button">Set Console Key</button>
+        <p id="settings-console-label"></p>
+        <button id="settings-tour-button">Redo Tour</button>
+      </div>
+      <div id="settings-modal-validation">
+        <input type="text" placeholder="Username (Optional)" id="validation-username">
+        <input type="text" placeholder="PlayFabPlayerID" id="validation-playfab-id">
+        <button id="validate-button">Validate</button>
+        <div id="validation-output" class="table-additional-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCAL/GLOBAL BAN TOOLTIP -->
+  <div id="ban-tooltip" class="hide">
+    <button id="local-ban-button">Local</button>
+    <button id="global-ban-button">Global</button>
+  </div>
+
+  <div id="local-ban-modal" class="hide">
+    <div id="local-ban-content">
+      <button id="local-ban-modal-close">
+        <svg id="local-ban-modal-close-svg" width="32" height="32" viewBox="0 0 32 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M26.0612 23.9387C26.343 24.2205 26.5013 24.6027 26.5013 25.0012C26.5013 25.3997 26.343 25.7819 26.0612 26.0637C25.7794 26.3455 25.3972 26.5038 24.9987 26.5038C24.6002 26.5038 24.218 26.3455 23.9362 26.0637L15.9999 18.125L8.0612 26.0612C7.7794 26.343 7.39721 26.5013 6.9987 26.5013C6.60018 26.5013 6.21799 26.343 5.9362 26.0612C5.6544 25.7794 5.49609 25.3972 5.49609 24.9987C5.49609 24.6002 5.6544 24.218 5.9362 23.9362L13.8749 16L5.9387 8.06122C5.6569 7.77943 5.49859 7.39724 5.49859 6.99872C5.49859 6.60021 5.6569 6.21802 5.9387 5.93622C6.22049 5.65443 6.60268 5.49612 7.0012 5.49612C7.39971 5.49612 7.7819 5.65443 8.0637 5.93622L15.9999 13.875L23.9387 5.93497C24.2205 5.65318 24.6027 5.49487 25.0012 5.49487C25.3997 5.49487 25.7819 5.65318 26.0637 5.93497C26.3455 6.21677 26.5038 6.59896 26.5038 6.99747C26.5038 7.39599 26.3455 7.77818 26.0637 8.05998L18.1249 16L26.0612 23.9387Z"
+            fill="white" />
+        </svg>
+      </button>
+      <input type="text" placeholder="Reason" id="local-ban-reason">
+      <input type="number" min="1" max="999999" placeholder="Duration" id="local-ban-duration">
+      <button id="local-ban-submit">Ban</button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/renderer.ts"></script>
+</body>
+
+</html>

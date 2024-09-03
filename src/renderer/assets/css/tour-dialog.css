@@ -1,0 +1,28 @@
+.custom-tour {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+}
+
+.custom-tour .tg-dialog-footer #tg-dialog-prev-btn {
+  background-color: black !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 4px;
+}
+
+.custom-tour .tg-dialog-footer #tg-dialog-prev-btn:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
+.custom-tour .tg-dialog-footer #tg-dialog-next-btn {
+  background-color: black !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 4px;
+}
+
+.custom-tour .tg-dialog-footer #tg-dialog-next-btn:hover {
+  background-color: white !important;
+  color: black !important;
+}
