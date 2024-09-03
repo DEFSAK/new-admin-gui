@@ -372,7 +372,7 @@ export const global_init = (): void => {
     } else if (current_ban_target) {
       playfab_ids = [get_player_data(current_ban_target).player_id]
     }
-
+    console.log([...ban_charges.map((charge) => charge.ident)])
     window.electron.ipcRenderer.send('ban-players', {
       playfab_ids,
       ban_duration,
@@ -381,6 +381,7 @@ export const global_init = (): void => {
   })
 
   window.electron.ipcRenderer.on('ban-players-result', (_, args) => {
+    console.log(args)
     const command = args.data.ban_command
     console.log(args)
     if (command) {

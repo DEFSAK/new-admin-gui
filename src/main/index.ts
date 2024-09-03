@@ -288,13 +288,12 @@ app.whenReady().then(() => {
       .then(async () => {
         const tokens = getTokens()
         if (!tokens) return
-        const { playfab_ids, ban_charges, ban_message, ban_duration } = args
+        const { playfab_ids, ban_charges, ban_duration } = args
 
         const response = (await ban_players(
           tokens.access_token,
           playfab_ids,
           ban_charges,
-          ban_message,
           ban_duration ? ban_duration : null
         )) as { data: [{ result }, { result }]; message: string } | null
 

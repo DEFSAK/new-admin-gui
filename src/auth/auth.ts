@@ -143,14 +143,13 @@ export const ban_players = async (
   token: string,
   player_ids: string[],
   ban_charges: string[],
-  ban_message: string,
   time_override?: number
 ): Promise<unknown | null> => {
   const requests = player_ids.map((player_id, index) => {
     const post = { ...post_template }
     post.params.playfab_id = player_id
     post.params.charges = ban_charges
-    post.params.ban_time_override = time_override || null
+    post.params.ban_time_override = Number(time_override) || null
     post.id = index + 1
     return post
   })
@@ -166,7 +165,7 @@ export const ban_players = async (
   )
 
   if (response.data) {
-    return { data: response.data, message: ban_message }
+    return { data: response.data }
   }
 
   return null
