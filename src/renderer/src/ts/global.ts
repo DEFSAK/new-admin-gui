@@ -212,19 +212,67 @@ export const create_table_entry = (
   kick_button.addEventListener('click', (event) => {
     event.stopPropagation()
 
-    const ban_message = get_ban_message()
-    const checked_entries = get_checked_entries()
-    if (checked_entries.length > 1) {
-      checked_entries.forEach((entry) => {
-        const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+    const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
+    kick_modal.classList.remove('hide')
+
+    const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
+    local_kick_reason.value = ''
+
+    const local_kick_modal_close = document.querySelector(
+      '#local-kick-modal-close'
+    ) as HTMLButtonElement
+    local_kick_modal_close.addEventListener('click', () => {
+      kick_modal.classList.add('hide')
+      local_kick_reason.value = ''
+    })
+
+    const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
+    local_kick_fill.addEventListener('click', () => {
+      const ban_charges = get_ban_charges()
+      if (ban_charges.length === 0) {
+        return
+      }
+
+      let reason: string = ''
+      if (ban_charges.length === 1) {
+        reason = ban_charges[0].message
+      } else {
+        const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+        reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+      }
+
+      local_kick_reason.value = reason
+    })
+
+    const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
+    local_kick_submit.addEventListener('click', () => {
+      const checked_entries = get_checked_entries()
+      if (checked_entries.length > 1) {
+        checked_entries.forEach((entry) => {
+          const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+          window.electron.ipcRenderer.send(
+            'command',
+            `kickbyid ${playfab_text.innerText} "${local_kick_reason.value}"`
+          )
+        })
+      } else {
         window.electron.ipcRenderer.send(
           'command',
-          `kickbyid ${playfab_text.innerText} "${ban_message}"`
+          `kickbyid ${player_id} "${local_kick_reason.value}"`
         )
-      })
-    } else {
-      window.electron.ipcRenderer.send('command', `kickbyid ${player_id} "${ban_message}"`)
-    }
+      }
+      kick_modal.classList.add('hide')
+    })
+
+    // const checked_entries = get_checked_entries()
+    // if (checked_entries.length > 1) {
+    //   checked_entries.forEach((entry) => {
+    //     const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+    //     window.electron.ipcRenderer.send('command', `kickbyid ${playfab_text.innerText} "Kicked"`)
+    //   })
+    // } else {
+    //   window.electron.ipcRenderer.send('command', `kickbyid ${player_id} "Kicked"`)
+    // }
   })
 
   const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
@@ -297,17 +345,24 @@ export const set_player_count = (count: number): void => {
   player_count.textContent = `Players (${count})`
 }
 
-export const get_ban_charges = (): { ident: string; time: number; max_time: number }[] => {
+export const get_ban_charges = (): {
+  ident: string
+  time: number
+  max_time: number
+  message: string
+}[] => {
   const tags = document.querySelectorAll('.tagify__tag') as NodeListOf<HTMLElement>
   if (tags.length === 0) {
     return []
   }
 
   return [...tags].map((tag) => {
+    console.log(tag.attributes)
     return {
       ident: tag.attributes['ident'].value as string,
-      time: tag.attributes['time'].value as number,
-      max_time: tag.attributes['max_time'] as number
+      time: Number(tag.attributes['time'].value) as number,
+      max_time: Number(tag.attributes['max_time'].value) as number,
+      message: tag.attributes['message'].value as string
     }
   })
 }
@@ -398,7 +453,27 @@ export const global_init = (): void => {
 
   const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
   const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
+  const local_ban_fill = document.querySelector('#local-ban-fill') as HTMLButtonElement
   const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
+
+  local_ban_fill.addEventListener('click', () => {
+    const ban_duration = get_ban_duration()
+    const ban_charges = get_ban_charges()
+    if (ban_charges.length === 0) {
+      return
+    }
+
+    let reason: string = ''
+    if (ban_charges.length === 1) {
+      reason = ban_charges[0].message
+    } else {
+      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+    }
+
+    local_ban_reason.value = reason
+    local_ban_duration.value = ban_duration
+  })
 
   local_ban_submit.addEventListener('click', () => {
     let reason = local_ban_reason.value

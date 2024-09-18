@@ -81,6 +81,8 @@ export const refresh_token = async (token: string): Promise<TokenData | null> =>
       }
     })
 
+    console.log('Refreshed token')
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(error)
@@ -122,6 +124,12 @@ export const get_validated_players = async (
 
   if (response.data) {
     // return response.data.result.validated_players
+    console.log('Validated players')
+    console.log(
+      response.data[0].result.validated_players.filter(
+        (player) => player.playfab_id === '929E11C8D63BE105'
+      )
+    )
     return response.data
   }
 
@@ -165,6 +173,8 @@ export const ban_players = async (
   )
 
   if (response.data) {
+    console.log('Banned players')
+    console.log(response.data)
     return { data: response.data }
   }
 
@@ -187,6 +197,8 @@ export const get_catalog = async (token: string): Promise<unknown | null> => {
   )
 
   if (response.data) {
+    console.log('Catalog')
+    console.log(response.data)
     return response.data
   }
 

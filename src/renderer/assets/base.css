@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap);
+@import 'css/local-kick-modal.css';
 @import 'css/local-ban-modal.css';
 @import 'css/settings-modal.css';
 @import 'css/table-controls.css';
