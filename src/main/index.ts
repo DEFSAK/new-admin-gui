@@ -1,6 +1,6 @@
+import { refresh_token, get_validated_players, ban_players, get_catalog } from '../auth/auth'
 import { app, shell, BrowserWindow, ipcMain, clipboard, type IpcMainEvent } from 'electron'
 import { GlobalKeyboardListener, type IGlobalKeyEvent } from 'node-global-key-listener'
-import { refresh_token, get_validated_players, ban_players, get_catalog } from '../auth/auth'
 import { Hardware, type Keyboard, type Mouse, type Workwindow } from 'keysender'
 import { isAccessTokenExpired, saveTokens, getTokens } from '../auth/tokens'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -11,6 +11,7 @@ import { autoUpdater } from 'electron-updater'
 import settings from 'electron-settings'
 import { join } from 'path'
 import fs from 'fs'
+
 const KeyboardListener = new GlobalKeyboardListener()
 
 async function doAuthLogin(): Promise<void> {
@@ -66,13 +67,12 @@ function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
-    show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
-    }
+    },
   })
 
   mainWindow.setTitle('Admin GooWee')
@@ -183,9 +183,15 @@ const command_queue: { event: IpcMainEvent; command: string }[] = []
 let is_processing = false
 
 const process_command_queue = async (): Promise<void> => {
+  console.log('===== Processing Commands =====')
+  console.log(`Queue Length: ${command_queue.length}`)
+  console.log(command_queue.filter((v) => v.command))  
+  console.log('===== Processing Commands =====')
+
   if (is_processing || command_queue.length === 0) return
   is_processing = true
   const { event, command } = command_queue.shift()!
+
 
   if (command.length === 0) {
     event.reply('command-result', { status: false, message: 'Command is empty' })

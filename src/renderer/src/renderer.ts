@@ -59,3 +59,11 @@ window.electron.ipcRenderer.on('auth-complete', (_, first_run) => {
   init(first_run)
   document.body.classList.remove('pre-init')
 })
+
+window.electron.ipcRenderer.on('visibility-change', () => { 
+  if (document.body.style.display) {
+    document.body.style.display = 'block'
+  } else {
+    document.body.style.display = 'none'
+  }
+})
