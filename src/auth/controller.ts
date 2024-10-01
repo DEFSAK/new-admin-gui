@@ -1,9 +1,10 @@
 import Express from 'express'
 import type { Server } from 'http'
 import { BrowserWindow, type IpcMain } from 'electron'
-import { auth_code, get_login_url, refresh_token, get_validated_players } from './auth'
+import { auth_code, get_login_url, refresh_token, get_validated_players, TokenData } from './auth'
 import { redirect_uri, client_id } from './config.json'
 import { saveTokens } from './tokens'
+import { AuthorizationTokenConfig } from 'simple-oauth2'
 
 let auth_window: BrowserWindow | null
 let http_server: Server | null
@@ -26,11 +27,11 @@ const login = (_main_window: BrowserWindow): void => {
       redirect_uri,
       client_id,
       code_verifier
-    }
+    } as AuthorizationTokenConfig
 
     try {
       const token_data = await auth_code.getToken(token_params)
-      saveTokens(token_data.token)
+      saveTokens(token_data.token as unknown as TokenData) // TODO: Fix this
 
       last_auth_state = true
     } catch (_) {
