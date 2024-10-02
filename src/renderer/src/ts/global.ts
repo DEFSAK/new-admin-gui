@@ -332,34 +332,7 @@ export const global_init = (): void => {
   //     }
   //   })
   // }
-    create_table_entry('Herman', '1234567890', { 
-      aliases: [],
-      created_at: '2021-09-01',
-      platform: 'PC',
-      trust_info: {
-        is_banned: false,
-        is_new_to_db: false,
-        was_banned: false,
-        ban_charges: null,
-        is_admin: true,
-        is_suspicious: false,
-        is_veteran: true
-      }
-    })
-    create_table_entry('Lericko', '1234567890', { 
-      aliases: [],
-      created_at: '2021-09-01',
-      platform: 'PC',
-      trust_info: {
-        is_banned: false,
-        is_new_to_db: false,
-        was_banned: false,
-        ban_charges: null,
-        is_admin: true,
-        is_suspicious: false,
-        is_veteran: true
-      }
-    })
+
   window.electron.ipcRenderer.on('player-data', (_, data) => {
     clear_table()
     set_player_count(data.length)
