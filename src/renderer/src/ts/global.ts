@@ -74,6 +74,7 @@ export const get_player_data = (target: HTMLDivElement): PlayerData => {
 }
 
 let current_ban_target: HTMLDivElement | null = null
+let current_kick_target: HTMLDivElement | null = null
 export const create_table_entry = (
   player_name: string,
   player_id: string,
@@ -210,59 +211,12 @@ export const create_table_entry = (
 
   const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
   const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
-  const local_kick_modal_close = document.querySelector(
-    '#local-kick-modal-close'
-  ) as HTMLButtonElement
-  local_kick_modal_close.addEventListener('click', () => {
-    kick_modal.classList.add('hide')
-    local_kick_reason.value = ''
-  })
-  
-  const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
-  local_kick_fill.addEventListener('click', () => {
-    const ban_charges = get_ban_charges()
-    if (ban_charges.length === 0) {
-      return
-    }
-
-    let reason: string = ''
-    if (ban_charges.length === 1) {
-      reason = ban_charges[0].message
-    } else {
-      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
-      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
-    }
-
-    local_kick_reason.value = reason
-  })
-
-  const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
-  local_kick_submit.addEventListener('click', (e) => {
-    e.stopPropagation()
-
-    const checked_entries = get_checked_entries()
-
-    if (checked_entries.length > 1) {
-      checked_entries.forEach((entry) => {
-        const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
-        window.electron.ipcRenderer.send(
-          'command',
-          `kickbyid ${playfab_text.innerText} "${local_kick_reason.value}"`
-        )
-      })
-    } else {
-      window.electron.ipcRenderer.send(
-        'command',
-        `kickbyid ${player_id} "${local_kick_reason.value}"`
-      )
-    }
-    kick_modal.classList.add('hide')
-  })
 
   let tooltip_timeout
   kick_button.addEventListener('click', (event) => {
     event.stopPropagation()
 
+    current_kick_target = table_item
     kick_modal.classList.remove('hide')
     local_kick_reason.value = ''
   })
@@ -378,7 +332,34 @@ export const global_init = (): void => {
   //     }
   //   })
   // }
-
+    create_table_entry('Herman', '1234567890', { 
+      aliases: [],
+      created_at: '2021-09-01',
+      platform: 'PC',
+      trust_info: {
+        is_banned: false,
+        is_new_to_db: false,
+        was_banned: false,
+        ban_charges: null,
+        is_admin: true,
+        is_suspicious: false,
+        is_veteran: true
+      }
+    })
+    create_table_entry('Lericko', '1234567890', { 
+      aliases: [],
+      created_at: '2021-09-01',
+      platform: 'PC',
+      trust_info: {
+        is_banned: false,
+        is_new_to_db: false,
+        was_banned: false,
+        ban_charges: null,
+        is_admin: true,
+        is_suspicious: false,
+        is_veteran: true
+      }
+    })
   window.electron.ipcRenderer.on('player-data', (_, data) => {
     clear_table()
     set_player_count(data.length)
@@ -495,5 +476,57 @@ export const global_init = (): void => {
     commands.forEach((command) => {
       window.electron.ipcRenderer.send('command', command)
     })
+  })
+
+  const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
+  const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
+  const local_kick_modal_close = document.querySelector(
+    '#local-kick-modal-close'
+  ) as HTMLButtonElement
+  local_kick_modal_close.addEventListener('click', () => {
+    kick_modal.classList.add('hide')
+    local_kick_reason.value = ''
+  })
+  
+  const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
+  local_kick_fill.addEventListener('click', () => {
+    const ban_charges = get_ban_charges()
+    if (ban_charges.length === 0) {
+      return
+    }
+
+    let reason: string = ''
+    if (ban_charges.length === 1) {
+      reason = ban_charges[0].message
+    } else {
+      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+    }
+
+    local_kick_reason.value = reason
+  })
+
+  const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
+  local_kick_submit.addEventListener('click', (e) => {
+    e.stopPropagation()
+
+    const checked_entries = get_checked_entries()
+
+    if (checked_entries.length > 1) {
+      checked_entries.forEach((entry) => {
+        const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+        window.electron.ipcRenderer.send(
+          'command',
+          `kickbyid ${playfab_text.innerText} "${local_kick_reason.value}"`
+        )
+      })
+    } else if(current_kick_target) {
+      const player_data = get_player_data(current_kick_target)
+      window.electron.ipcRenderer.send(
+        'command',
+        `kickbyid ${player_data.player_id} "${local_kick_reason.value}"`
+      )
+    }
+    kick_modal.classList.add('hide')
   })
 }
