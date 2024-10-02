@@ -208,63 +208,71 @@ export const create_table_entry = (
   const kick_button = actions_container.querySelector('.table-kick-button') as HTMLButtonElement
   const ban_button = actions_container.querySelector('.table-ban-button') as HTMLButtonElement
 
-  const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
-  const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
-  const local_kick_modal_close = document.querySelector(
-    '#local-kick-modal-close'
-  ) as HTMLButtonElement
-  local_kick_modal_close.addEventListener('click', () => {
-    kick_modal.classList.add('hide')
-    local_kick_reason.value = ''
-  })
-  
-  const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
-  local_kick_fill.addEventListener('click', () => {
-    const ban_charges = get_ban_charges()
-    if (ban_charges.length === 0) {
-      return
-    }
-
-    let reason: string = ''
-    if (ban_charges.length === 1) {
-      reason = ban_charges[0].message
-    } else {
-      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
-      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
-    }
-
-    local_kick_reason.value = reason
-  })
-
-  const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
-  local_kick_submit.addEventListener('click', (e) => {
-    e.stopPropagation()
-
-    const checked_entries = get_checked_entries()
-
-    if (checked_entries.length > 1) {
-      checked_entries.forEach((entry) => {
-        const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
-        window.electron.ipcRenderer.send(
-          'command',
-          `kickbyid ${playfab_text.innerText} "${local_kick_reason.value}"`
-        )
-      })
-    } else {
-      window.electron.ipcRenderer.send(
-        'command',
-        `kickbyid ${player_id} "${local_kick_reason.value}"`
-      )
-    }
-    kick_modal.classList.add('hide')
-  })
-
   let tooltip_timeout
   kick_button.addEventListener('click', (event) => {
     event.stopPropagation()
 
+    const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
     kick_modal.classList.remove('hide')
+
+    const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
     local_kick_reason.value = ''
+
+    const local_kick_modal_close = document.querySelector(
+      '#local-kick-modal-close'
+    ) as HTMLButtonElement
+    local_kick_modal_close.addEventListener('click', () => {
+      kick_modal.classList.add('hide')
+      local_kick_reason.value = ''
+    })
+
+    const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
+    local_kick_fill.addEventListener('click', () => {
+      const ban_charges = get_ban_charges()
+      if (ban_charges.length === 0) {
+        return
+      }
+
+      let reason: string = ''
+      if (ban_charges.length === 1) {
+        reason = ban_charges[0].message
+      } else {
+        const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+        reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+      }
+
+      local_kick_reason.value = reason
+    })
+
+    const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
+    local_kick_submit.addEventListener('click', () => {
+      const checked_entries = get_checked_entries()
+      if (checked_entries.length > 1) {
+        checked_entries.forEach((entry) => {
+          const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+          window.electron.ipcRenderer.send(
+            'command',
+            `kickbyid ${playfab_text.innerText} "${local_kick_reason.value}"`
+          )
+        })
+      } else {
+        window.electron.ipcRenderer.send(
+          'command',
+          `kickbyid ${player_id} "${local_kick_reason.value}"`
+        )
+      }
+      kick_modal.classList.add('hide')
+    })
+
+    // const checked_entries = get_checked_entries()
+    // if (checked_entries.length > 1) {
+    //   checked_entries.forEach((entry) => {
+    //     const playfab_text = entry.querySelector('.playfab-body') as HTMLDivElement
+    //     window.electron.ipcRenderer.send('command', `kickbyid ${playfab_text.innerText} "Kicked"`)
+    //   })
+    // } else {
+    //   window.electron.ipcRenderer.send('command', `kickbyid ${player_id} "Kicked"`)
+    // }
   })
 
   const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
