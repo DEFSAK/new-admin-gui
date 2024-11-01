@@ -220,10 +220,6 @@ export const create_table_entry = (
 
   // const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
   const local_ban_modal = document.querySelector('#local-ban-modal') as HTMLDivElement
-  const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
-  const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
-  const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
-
   ban_button.addEventListener('click', (event) => {
     event.stopPropagation()
 
@@ -244,36 +240,6 @@ export const create_table_entry = (
     // tooltip_timeout = setTimeout(() => {
     //   ban_tooltip.classList.add('hide')
     // }, 3000)
-  })
-
-  local_ban_submit.addEventListener('click', () => {
-    let reason = local_ban_reason.value
-    const duration = Number(local_ban_duration.value)
-
-    if (isNaN(duration) || duration < 0 || duration > 999999) {
-      return
-    }
-
-    if (reason.length === 0) {
-      reason = `Banned for ${duration} hours`
-    }
-
-    const selected_entries = get_checked_entries()
-
-    const commands: string[] = []
-    if (selected_entries.length > 0) {
-      const player_data = selected_entries.map((entry) => get_player_data(entry))
-      player_data.forEach((player) => {
-        commands.push(`banbyid ${player.player_id} ${duration} "${reason}"`)
-      })
-    } else if (current_ban_target) {
-      const player_data = get_player_data(current_ban_target)
-      commands.push(`banbyid ${player_data.player_id} ${duration} "${reason}"`)
-    }
-
-    commands.forEach((command) => {
-      window.electron.ipcRenderer.send('command', command)
-    })
   })
 
   const name_text = name.querySelector('.display-name-text') as HTMLParagraphElement
@@ -485,6 +451,40 @@ export const global_init = (): void => {
   //     window.electron.ipcRenderer.send('command', command)
   //   })
   // })
+
+  const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
+  const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
+  const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
+
+  local_ban_submit.addEventListener('click', () => {
+    let reason = local_ban_reason.value
+    const duration = Number(local_ban_duration.value)
+
+    if (isNaN(duration) || duration < 0 || duration > 999999) {
+      return
+    }
+
+    if (reason.length === 0) {
+      reason = `Banned for ${duration} hours`
+    }
+
+    const selected_entries = get_checked_entries()
+
+    const commands: string[] = []
+    if (selected_entries.length > 0) {
+      const player_data = selected_entries.map((entry) => get_player_data(entry))
+      player_data.forEach((player) => {
+        commands.push(`banbyid ${player.player_id} ${duration} "${reason}"`)
+      })
+    } else if (current_ban_target) {
+      const player_data = get_player_data(current_ban_target)
+      commands.push(`banbyid ${player_data.player_id} ${duration} "${reason}"`)
+    }
+
+    commands.forEach((command) => {
+      window.electron.ipcRenderer.send('command', command)
+    })
+  })
 
   const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
   const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
