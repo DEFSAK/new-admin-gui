@@ -5,71 +5,71 @@ const header_checkbox = document.querySelector(
   '#table #header #name .custom-checkbox-container .custom-checkbox'
 ) as HTMLInputElement
 
-interface PlayerInfo {
-  created_at: string
-  platform: string
-  aliases: string[]
-  trust_info: {
-    is_admin: boolean
-    is_banned: boolean
-    is_new_to_db: boolean
-    is_suspicious: boolean
-    is_veteran: boolean
-    was_banned: boolean
-    ban_charges: string[] | null
-  }
-}
+// interface PlayerInfo {
+//   created_at: string
+//   platform: string
+//   aliases: string[]
+//   trust_info: {
+//     is_admin: boolean
+//     is_banned: boolean
+//     is_new_to_db: boolean
+//     is_suspicious: boolean
+//     is_veteran: boolean
+//     was_banned: boolean
+//     ban_charges: string[] | null
+//   }
+// }
 
-interface PlayerData extends PlayerInfo {
+interface PlayerData /* extends PlayerInfo */ {
   player_name: string
   player_id: string
 }
 
-export const get_ban_message = (): string => {
-  const punish_reason = document.querySelector('#punish-reason') as HTMLInputElement
-  return punish_reason.value
-}
+// export const get_ban_message = (): string => {
+//   const punish_reason = document.querySelector('#punish-reason') as HTMLInputElement
+//   return punish_reason.value
+// }
 
-export const get_ban_duration = (): string => {
-  const punish_duration = document.querySelector('#punish-duration-slider') as HTMLInputElement
-  return punish_duration.value
-}
+// export const get_ban_duration = (): string => {
+//   const punish_duration = document.querySelector('#punish-duration-slider') as HTMLInputElement
+//   return punish_duration.value
+// }
 
 export const get_player_data = (target: HTMLDivElement): PlayerData => {
   const name = target.querySelector('.display-name-text') as HTMLParagraphElement
   const playfab = target.querySelector('.playfab-body') as HTMLDivElement
 
-  const extra_content = target.querySelector('.table-additional-content') as HTMLDivElement
-  const table = extra_content.querySelector('table') as HTMLTableElement
-  const rows = table.querySelectorAll('tr')
+  // const extra_content = target.querySelector('.table-additional-content') as HTMLDivElement
+  // const table = extra_content.querySelector('table') as HTMLTableElement
+  // const rows = table.querySelectorAll('tr')
 
-  const created_at = rows[0].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const platform = rows[1].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const aliases = rows[2].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const created_at = rows[0].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const platform = rows[1].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const aliases = rows[2].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
 
-  const is_banned = rows[4].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const is_new_to_db = rows[5].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const was_banned = rows[6].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const ban_charges = rows[7].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const is_suspicious = rows[8].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const is_veteran = rows[9].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
-  const is_admin = rows[10].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const is_banned = rows[4].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const is_new_to_db = rows[5].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const was_banned = rows[6].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const ban_charges = rows[7].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const is_suspicious = rows[8].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const is_veteran = rows[9].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
+  // const is_admin = rows[10].querySelector('td:nth-child(2)') as HTMLTableDataCellElement
 
   return {
     player_name: name.textContent as string,
     player_id: playfab.textContent as string,
-    created_at: created_at.textContent as string,
-    platform: platform.textContent as string,
-    aliases: aliases.textContent?.split(', ') ?? [],
-    trust_info: {
-      is_banned: is_banned.textContent === 'Yes',
-      is_new_to_db: is_new_to_db.textContent === 'Yes',
-      was_banned: was_banned.textContent === 'Yes',
-      ban_charges: ban_charges.textContent?.split(', ') ?? null,
-      is_suspicious: is_suspicious.textContent === 'Yes',
-      is_veteran: is_veteran.textContent === 'Yes',
-      is_admin: is_admin.textContent === 'Yes'
-    }
+    // created_at: created_at.textContent as string,
+    // platform: platform.textContent as string,
+    // aliases: aliases.textContent?.split(', ') ?? [],
+    // trust_info: {
+    //   is_banned: is_banned.textContent === 'Yes',
+    //   is_new_to_db: is_new_to_db.textContent === 'Yes',
+    //   was_banned: was_banned.textContent === 'Yes',
+    //   ban_charges: ban_charges.textContent?.split(', ') ?? null,
+    //   is_suspicious: is_suspicious.textContent === 'Yes',
+    //   is_veteran: is_veteran.textContent === 'Yes',
+    //   is_admin: is_admin.textContent === 'Yes'
+    // }
   }
 }
 
@@ -78,7 +78,6 @@ let current_kick_target: HTMLDivElement | null = null
 export const create_table_entry = (
   player_name: string,
   player_id: string,
-  item: PlayerInfo
 ): void => {
   const table_item = document.createElement('div')
   table_item.classList.add('row')
@@ -100,14 +99,12 @@ export const create_table_entry = (
 
   const name = document.createElement('div')
   name.classList.add('display-name-container')
-  name.innerHTML = `<p class="display-name-text">
-    ${player_name}
-    </p>
-    <div class="badges">
-        ${item.trust_info.is_admin ? '<span class="badge admin"></span>' : ''}
-        ${item.trust_info.is_veteran ? '<span class="badge veteran"></span>' : ''}
-        ${item.trust_info.is_suspicious || item.trust_info.was_banned ? '<span class="badge suspicious"></span>' : ''}
-    </div>`
+  name.innerHTML = `<p class="display-name-text">${player_name}</p>`
+    // `<div class="badges">
+    //     ${item.trust_info.is_admin ? '<span class="badge admin"></span>' : ''}
+    //     ${item.trust_info.is_veteran ? '<span class="badge veteran"></span>' : ''}
+    //     ${item.trust_info.is_suspicious || item.trust_info.was_banned ? '<span class="badge suspicious"></span>' : ''}
+    // </div>`
   name_row.appendChild(name)
 
   const playfab_container = document.createElement('div')
@@ -132,62 +129,62 @@ export const create_table_entry = (
   </button>`
   row_content.appendChild(actions_container)
 
-  const extra_content = document.createElement('div')
-  extra_content.classList.add('table-additional-content')
-  extra_content.classList.add('hide')
-  extra_content.innerHTML = `
-  <table>
-    <tr>
-      <td>Account created</td>
-      <td>${item.created_at}</td>
-    </tr>
-    <tr>
-      <td>Platform estimate</td>
-      <td>${item.platform}</td>
-    </tr>
-    <tr>
-      <td>Aliases</td>
-      <td>${item.aliases.length > 0 ? item.aliases.join(', ') : 'None'}</td>
-    </tr>
-    <tr className="ptac-t-divider"><td></td><td></td></tr>
-    <tr>
-      <td>Is Banned</td>
-      <td>${item.trust_info.is_banned ? 'Yes' : 'No'}</td>
-    </tr>
-    <tr>
-      <td>Is New to DB</td>
-      <td>${item.trust_info.is_new_to_db ? 'Yes' : 'No'}</td>
-    </tr>
-    <tr>
-      <td>Was Banned</td>
-      <td>${item.trust_info.was_banned ? 'Yes' : 'No'}</td>
-    </tr>
-    <tr>
-      <td>Ban Charges</td>
-      <td>${item.trust_info.ban_charges ? item.trust_info.ban_charges.join(', ') : 'None'}</td>
-    </tr>
-    <tr>
-      <td>Is Suspicious</td>
-      <td>${item.trust_info.is_suspicious ? 'Yes' : 'No'}</td>
-    </tr>
-    <tr>
-      <td>Is Veteran</td>
-      <td>${item.trust_info.is_veteran ? 'Yes' : 'No'}</td>
-    </tr>
-    <tr>
-      <td>Is Admin</td>
-      <td>${item.trust_info.is_admin ? 'Yes' : 'No'}</td>
-    </tr>
-  </table>
-  `
-  table_item.appendChild(extra_content)
+  // const extra_content = document.createElement('div')
+  // extra_content.classList.add('table-additional-content')
+  // extra_content.classList.add('hide')
+  // extra_content.innerHTML = `
+  // <table>
+  //   <tr>
+  //     <td>Account created</td>
+  //     <td>${item.created_at}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Platform estimate</td>
+  //     <td>${item.platform}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Aliases</td>
+  //     <td>${item.aliases.length > 0 ? item.aliases.join(', ') : 'None'}</td>
+  //   </tr>
+  //   <tr className="ptac-t-divider"><td></td><td></td></tr>
+  //   <tr>
+  //     <td>Is Banned</td>
+  //     <td>${item.trust_info.is_banned ? 'Yes' : 'No'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Is New to DB</td>
+  //     <td>${item.trust_info.is_new_to_db ? 'Yes' : 'No'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Was Banned</td>
+  //     <td>${item.trust_info.was_banned ? 'Yes' : 'No'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Ban Charges</td>
+  //     <td>${item.trust_info.ban_charges ? item.trust_info.ban_charges.join(', ') : 'None'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Is Suspicious</td>
+  //     <td>${item.trust_info.is_suspicious ? 'Yes' : 'No'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Is Veteran</td>
+  //     <td>${item.trust_info.is_veteran ? 'Yes' : 'No'}</td>
+  //   </tr>
+  //   <tr>
+  //     <td>Is Admin</td>
+  //     <td>${item.trust_info.is_admin ? 'Yes' : 'No'}</td>
+  //   </tr>
+  // </table>
+  // `
+  // table_item.appendChild(extra_content)
   table_body.appendChild(table_item)
 
-  row_content.addEventListener('click', () => {
-    const extra_content = table_item.querySelector('.table-additional-content') as HTMLDivElement
-    extra_content.classList.toggle('hide')
-    extra_content.classList.toggle('show')
-  })
+  // row_content.addEventListener('click', () => {
+  //   const extra_content = table_item.querySelector('.table-additional-content') as HTMLDivElement
+  //   extra_content.classList.toggle('hide')
+  //   extra_content.classList.toggle('show')
+  // })
 
   const checkbox = name_row.querySelector('.custom-checkbox-container') as HTMLInputElement
   checkbox.addEventListener('click', (event) => {
@@ -221,7 +218,11 @@ export const create_table_entry = (
     local_kick_reason.value = ''
   })
 
-  const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
+  // const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
+  const local_ban_modal = document.querySelector('#local-ban-modal') as HTMLDivElement
+  const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
+  const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
+  const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
 
   ban_button.addEventListener('click', (event) => {
     event.stopPropagation()
@@ -231,14 +232,48 @@ export const create_table_entry = (
       clearTimeout(tooltip_timeout)
     }
 
-    const rect = ban_button.getBoundingClientRect()
-    ban_tooltip.style.left = `${rect.left - 152}px`
-    ban_tooltip.style.top = `${rect.top + 30}px`
-    ban_tooltip.classList.remove('hide')
+    // TODO: Ban Modal
+    event.stopPropagation()
+    local_ban_modal.classList.remove('hide')
 
-    tooltip_timeout = setTimeout(() => {
-      ban_tooltip.classList.add('hide')
-    }, 3000)
+    // const rect = ban_button.getBoundingClientRect()
+    // ban_tooltip.style.left = `${rect.left - 152}px`
+    // ban_tooltip.style.top = `${rect.top + 30}px`
+    // ban_tooltip.classList.remove('hide')
+
+    // tooltip_timeout = setTimeout(() => {
+    //   ban_tooltip.classList.add('hide')
+    // }, 3000)
+  })
+
+  local_ban_submit.addEventListener('click', () => {
+    let reason = local_ban_reason.value
+    const duration = Number(local_ban_duration.value)
+
+    if (isNaN(duration) || duration < 0 || duration > 999999) {
+      return
+    }
+
+    if (reason.length === 0) {
+      reason = `Banned for ${duration} hours`
+    }
+
+    const selected_entries = get_checked_entries()
+
+    const commands: string[] = []
+    if (selected_entries.length > 0) {
+      const player_data = selected_entries.map((entry) => get_player_data(entry))
+      player_data.forEach((player) => {
+        commands.push(`banbyid ${player.player_id} ${duration} "${reason}"`)
+      })
+    } else if (current_ban_target) {
+      const player_data = get_player_data(current_ban_target)
+      commands.push(`banbyid ${player_data.player_id} ${duration} "${reason}"`)
+    }
+
+    commands.forEach((command) => {
+      window.electron.ipcRenderer.send('command', command)
+    })
   })
 
   const name_text = name.querySelector('.display-name-text') as HTMLParagraphElement
@@ -291,27 +326,27 @@ export const set_player_count = (count: number): void => {
   player_count.textContent = `Players (${count})`
 }
 
-export const get_ban_charges = (): {
-  ident: string
-  time: number
-  max_time: number
-  message: string
-}[] => {
-  const tags = document.querySelectorAll('.tagify__tag') as NodeListOf<HTMLElement>
-  if (tags.length === 0) {
-    return []
-  }
+// export const get_ban_charges = (): {
+//   ident: string
+//   time: number
+//   max_time: number
+//   message: string
+// }[] => {
+//   const tags = document.querySelectorAll('.tagify__tag') as NodeListOf<HTMLElement>
+//   if (tags.length === 0) {
+//     return []
+//   }
 
-  return [...tags].map((tag) => {
-    console.log(tag.attributes)
-    return {
-      ident: tag.attributes['ident'].value as string,
-      time: Number(tag.attributes['time'].value) as number,
-      max_time: Number(tag.attributes['max_time'].value) as number,
-      message: tag.attributes['message'].value as string
-    }
-  })
-}
+//   return [...tags].map((tag) => {
+//     console.log(tag.attributes)
+//     return {
+//       ident: tag.attributes['ident'].value as string,
+//       time: Number(tag.attributes['time'].value) as number,
+//       max_time: Number(tag.attributes['max_time'].value) as number,
+//       message: tag.attributes['message'].value as string
+//     }
+//   })
+// }
 
 export const global_init = (): void => {
   // for (let i = 0; i < 10; i++) {
@@ -337,119 +372,119 @@ export const global_init = (): void => {
     clear_table()
     set_player_count(data.length)
     data.forEach((item) => {
-      create_table_entry(item.display_name, item.playfab_id, {
+      create_table_entry(item.display_name, item.playfab_id /*, {
         aliases: item.aliases,
         created_at: item.created_at,
         platform: item.platform,
         trust_info: item.trust_info
-      })
+      } */)
     })
     set_table_is_loading(false)
   })
 
-  const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
-  const local_ban_button = document.querySelector('#local-ban-button') as HTMLButtonElement
-  const global_ban_button = document.querySelector('#global-ban-button') as HTMLButtonElement
+  // const ban_tooltip = document.querySelector('#ban-tooltip') as HTMLDivElement
+  // const local_ban_button = document.querySelector('#local-ban-button') as HTMLButtonElement
+  // const global_ban_button = document.querySelector('#global-ban-button') as HTMLButtonElement
 
-  global_ban_button.addEventListener('click', (event) => {
-    event.stopPropagation()
-    ban_tooltip.classList.add('hide')
+  // global_ban_button.addEventListener('click', (event) => {
+  //   event.stopPropagation()
+  //   ban_tooltip.classList.add('hide')
 
-    const ban_charges = get_ban_charges()
-    if (ban_charges.length === 0) {
-      return
-    }
+  //   const ban_charges = get_ban_charges()
+  //   if (ban_charges.length === 0) {
+  //     return
+  //   }
 
-    const selected_entries = get_checked_entries()
+  //   const selected_entries = get_checked_entries()
 
-    const ban_duration = get_ban_duration()
-    let playfab_ids: string[] = []
+  //   const ban_duration = get_ban_duration()
+  //   let playfab_ids: string[] = []
 
-    if (selected_entries.length > 0) {
-      playfab_ids = selected_entries.map((entry) => {
-        const player_data = get_player_data(entry)
-        return player_data.player_id
-      })
-    } else if (current_ban_target) {
-      playfab_ids = [get_player_data(current_ban_target).player_id]
-    }
-    console.log([...ban_charges.map((charge) => charge.ident)])
-    window.electron.ipcRenderer.send('ban-players', {
-      playfab_ids,
-      ban_duration,
-      ban_charges: [...ban_charges.map((charge) => charge.ident)]
-    })
-  })
+  //   if (selected_entries.length > 0) {
+  //     playfab_ids = selected_entries.map((entry) => {
+  //       const player_data = get_player_data(entry)
+  //       return player_data.player_id
+  //     })
+  //   } else if (current_ban_target) {
+  //     playfab_ids = [get_player_data(current_ban_target).player_id]
+  //   }
+  //   console.log([...ban_charges.map((charge) => charge.ident)])
+  //   window.electron.ipcRenderer.send('ban-players', {
+  //     playfab_ids,
+  //     ban_duration,
+  //     ban_charges: [...ban_charges.map((charge) => charge.ident)]
+  //   })
+  // })
 
-  window.electron.ipcRenderer.on('ban-players-result', (_, args) => {
-    console.log(args)
-    const command = args.data.ban_command
-    console.log(args)
-    if (command) {
-      window.electron.ipcRenderer.send('command', command)
-    }
-  })
+  // window.electron.ipcRenderer.on('ban-players-result', (_, args) => {
+  //   console.log(args)
+  //   const command = args.data.ban_command
+  //   console.log(args)
+  //   if (command) {
+  //     window.electron.ipcRenderer.send('command', command)
+  //   }
+  // })
 
-  const local_ban_modal = document.querySelector('#local-ban-modal') as HTMLDivElement
-  local_ban_button.addEventListener('click', (event) => {
-    event.stopPropagation()
-    ban_tooltip.classList.add('hide')
-    local_ban_modal.classList.remove('hide')
-  })
+  // const local_ban_modal = document.querySelector('#local-ban-modal') as HTMLDivElement
+  // local_ban_button.addEventListener('click', (event) => {
+  //   event.stopPropagation()
+  //   local_ban_modal.classList.remove('hide')
+  //   ban_tooltip.classList.add('hide')
+  // })
 
-  const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
-  const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
-  const local_ban_fill = document.querySelector('#local-ban-fill') as HTMLButtonElement
-  const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
+  // const local_ban_reason = document.querySelector('#local-ban-reason') as HTMLInputElement
+  // const local_ban_duration = document.querySelector('#local-ban-duration') as HTMLInputElement
+  // const local_ban_fill = document.querySelector('#local-ban-fill') as HTMLButtonElement
+  // const local_ban_submit = document.querySelector('#local-ban-submit') as HTMLButtonElement
 
-  local_ban_fill.addEventListener('click', () => {
-    const ban_duration = get_ban_duration()
-    const ban_charges = get_ban_charges()
-    if (ban_charges.length === 0) {
-      return
-    }
+  // local_ban_fill.addEventListener('click', () => {
+  //   const ban_duration = get_ban_duration()
+  //   const ban_charges = get_ban_charges()
+  //   if (ban_charges.length === 0) {
+  //     return
+  //   }
 
-    let reason: string = ''
-    if (ban_charges.length === 1) {
-      reason = ban_charges[0].message
-    } else {
-      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
-      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
-    }
+  //   let reason: string = ''
+  //   if (ban_charges.length === 1) {
+  //     reason = ban_charges[0].message
+  //   } else {
+  //     const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+  //     reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+  //   }
 
-    local_ban_reason.value = reason
-    local_ban_duration.value = ban_duration
-  })
+  //   local_ban_reason.value = reason
+  //   local_ban_duration.value = ban_duration
+  // })
 
-  local_ban_submit.addEventListener('click', () => {
-    let reason = local_ban_reason.value
-    const duration = Number(local_ban_duration.value)
+  // local_ban_submit.addEventListener('click', () => {
+  //   let reason = local_ban_reason.value
+  //   const duration = Number(local_ban_duration.value)
 
-    if (isNaN(duration) || duration < 0 || duration > 999999) {
-      return
-    }
+  //   if (isNaN(duration) || duration < 0 || duration > 999999) {
+  //     return
+  //   }
 
-    if (reason.length === 0) {
-      reason = `Banned for ${duration} hours`
-    }
+  //   if (reason.length === 0) {
+  //     reason = `Banned for ${duration} hours`
+  //   }
 
-    const selected_entries = get_checked_entries()
+  //   const selected_entries = get_checked_entries()
 
-    const commands: string[] = []
-    if (selected_entries.length > 0) {
-      const player_data = selected_entries.map((entry) => get_player_data(entry))
-      player_data.forEach((player) => {
-        commands.push(`banbyid ${player.player_id} ${duration} "${reason}"`)
-      })
-    } else if (current_ban_target) {
-      const player_data = get_player_data(current_ban_target)
-      commands.push(`banbyid ${player_data.player_id} ${duration} "${reason}"`)
-    }
+  //   const commands: string[] = []
+  //   if (selected_entries.length > 0) {
+  //     const player_data = selected_entries.map((entry) => get_player_data(entry))
+  //     player_data.forEach((player) => {
+  //       commands.push(`banbyid ${player.player_id} ${duration} "${reason}"`)
+  //     })
+  //   } else if (current_ban_target) {
+  //     const player_data = get_player_data(current_ban_target)
+  //     commands.push(`banbyid ${player_data.player_id} ${duration} "${reason}"`)
+  //   }
 
-    commands.forEach((command) => {
-      window.electron.ipcRenderer.send('command', command)
-    })
-  })
+  //   commands.forEach((command) => {
+  //     window.electron.ipcRenderer.send('command', command)
+  //   })
+  // })
 
   const kick_modal = document.querySelector('#local-kick-modal') as HTMLDivElement
   const local_kick_reason = document.querySelector('#local-kick-reason') as HTMLInputElement
@@ -461,23 +496,23 @@ export const global_init = (): void => {
     local_kick_reason.value = ''
   })
   
-  const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
-  local_kick_fill.addEventListener('click', () => {
-    const ban_charges = get_ban_charges()
-    if (ban_charges.length === 0) {
-      return
-    }
+  // const local_kick_fill = document.querySelector('#local-kick-fill') as HTMLButtonElement
+  // local_kick_fill.addEventListener('click', () => {
+  //   const ban_charges = get_ban_charges()
+  //   if (ban_charges.length === 0) {
+  //     return
+  //   }
 
-    let reason: string = ''
-    if (ban_charges.length === 1) {
-      reason = ban_charges[0].message
-    } else {
-      const max_time = Math.max(...ban_charges.map((charge) => charge.time))
-      reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
-    }
+  //   let reason: string = ''
+  //   if (ban_charges.length === 1) {
+  //     reason = ban_charges[0].message
+  //   } else {
+  //     const max_time = Math.max(...ban_charges.map((charge) => charge.time))
+  //     reason = ban_charges.find((charge) => charge.time === max_time)?.message || ''
+  //   }
 
-    local_kick_reason.value = reason
-  })
+  //   local_kick_reason.value = reason
+  // })
 
   const local_kick_submit = document.querySelector('#local-kick-submit') as HTMLButtonElement
   local_kick_submit.addEventListener('click', (e) => {

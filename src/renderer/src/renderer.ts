@@ -25,23 +25,23 @@ function init(first_run: boolean): void {
     dialogZ: 9999999
   })
 
-  if (first_run) {
-    tour.start()
+  // if (first_run) {
+  //   tour.start()
 
-    const tour_complete_handler = (): void => {
-      console.log('Tour complete!!!')
-      const settings_modal = document.querySelector('#settings-modal')
-      const settings_modal_overlay = document.querySelector('#settings-modal-overlay')
-      if (settings_modal && settings_modal_overlay) {
-        settings_modal.classList.remove('hidden')
-        settings_modal.classList.add('first-run')
-        settings_modal_overlay.classList.remove('hidden')
-      }
-    }
+  //   const tour_complete_handler = (): void => {
+  //     console.log('Tour complete!!!')
+  //     const settings_modal = document.querySelector('#settings-modal')
+  //     const settings_modal_overlay = document.querySelector('#settings-modal-overlay')
+  //     if (settings_modal && settings_modal_overlay) {
+  //       settings_modal.classList.remove('hidden')
+  //       settings_modal.classList.add('first-run')
+  //       settings_modal_overlay.classList.remove('hidden')
+  //     }
+  //   }
 
-    tour.onFinish(tour_complete_handler)
-    tour.onAfterExit(tour_complete_handler)
-  }
+  //   tour.onFinish(tour_complete_handler)
+  //   tour.onAfterExit(tour_complete_handler)
+  // }
 
   setTimeout(() => {
     const tg_dialog = document.querySelector('.tg-dialog')
@@ -55,15 +55,16 @@ function init(first_run: boolean): void {
   })
 }
 
-window.electron.ipcRenderer.on('auth-complete', (_, first_run) => {
-  init(first_run)
-  document.body.classList.remove('pre-init')
-})
+init(false)
+// window.electron.ipcRenderer.on('auth-complete', (_, first_run) => {
+//   init(first_run)
+//   document.body.classList.remove('pre-init')
+// })
 
-window.electron.ipcRenderer.on('visibility-change', () => { 
-  if (document.body.style.display) {
-    document.body.style.display = 'block'
-  } else {
-    document.body.style.display = 'none'
-  }
-})
+// window.electron.ipcRenderer.on('visibility-change', () => { 
+//   if (document.body.style.display) {
+//     document.body.style.display = 'block'
+//   } else {
+//     document.body.style.display = 'none'
+//   }
+// })

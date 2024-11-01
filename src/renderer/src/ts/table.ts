@@ -26,21 +26,21 @@ export const set_table_is_loading = (is_loading: boolean): void => {
   }
 }
 
-export const get_badges = (table_item: HTMLDivElement): string[] => {
-  const badge_container = table_item.querySelector(
-    '.row-content .row-name .display-name-container .badges'
-  )
-  if (!badge_container) return []
+// export const get_badges = (table_item: HTMLDivElement): string[] => {
+//   const badge_container = table_item.querySelector(
+//     '.row-content .row-name .display-name-container .badges'
+//   )
+//   if (!badge_container) return []
 
-  const badges = badge_container.querySelectorAll('.badge')
+//   const badges = badge_container.querySelectorAll('.badge')
 
-  const badge_types: string[] = []
-  badges.forEach((badge) => {
-    badge_types.push(badge.classList[1])
-  })
+//   const badge_types: string[] = []
+//   badges.forEach((badge) => {
+//     badge_types.push(badge.classList[1])
+//   })
 
-  return badge_types
-}
+//   return badge_types
+// }
 
 export const table_init = (): void => {
   const header_checkbox = document.querySelector(
@@ -67,28 +67,28 @@ export const table_init = (): void => {
     toggle_all_checkboxes(header_checkbox.checked)
   })
 
-  const sort_button = document.querySelector(
-    '#table #header #header-sort #table-sort-button'
-  ) as HTMLButtonElement
+  // const sort_button = document.querySelector(
+  //   '#table #header #header-sort #table-sort-button'
+  // ) as HTMLButtonElement
 
-  sort_button.addEventListener('click', () => {
-    const table_entries = get_table_entries()
-    if (!table_entries.length) return
+  // sort_button.addEventListener('click', () => {
+  //   const table_entries = get_table_entries()
+  //   if (!table_entries.length) return
 
-    table_entries.forEach((entry) => {
-      const badges = get_badges(entry)
+  //   table_entries.forEach((entry) => {
+  //     const badges = get_badges(entry)
 
-      if (badges.includes('suspicious')) {
-        entry.style.order = '-1'
-      } else if (badges.includes('veteran')) {
-        entry.style.order = '0'
-      } else if (badges.includes('admin')) {
-        entry.style.order = '1'
-      } else {
-        entry.style.order = '0'
-      }
-    })
-  })
+  //     if (badges.includes('suspicious')) {
+  //       entry.style.order = '-1'
+  //     } else if (badges.includes('veteran')) {
+  //       entry.style.order = '0'
+  //     } else if (badges.includes('admin')) {
+  //       entry.style.order = '1'
+  //     } else {
+  //       entry.style.order = '0'
+  //     }
+  //   })
+  // })
 
   const search_input = document.querySelector(
     '#table #header #name #header-search'

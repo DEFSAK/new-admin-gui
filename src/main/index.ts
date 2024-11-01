@@ -1,47 +1,47 @@
-import { refresh_token, get_validated_players, ban_players, get_catalog } from '../auth/auth'
+// import { refresh_token, get_validated_players, ban_players, get_catalog } from '../auth/auth'
 import { app, shell, BrowserWindow, ipcMain, clipboard, type IpcMainEvent } from 'electron'
 import { GlobalKeyboardListener, type IGlobalKeyEvent } from 'node-global-key-listener'
 import { Hardware, type Keyboard, type Mouse, type Workwindow } from 'keysender'
-import { isAccessTokenExpired, saveTokens, getTokens } from '../auth/tokens'
+// import { isAccessTokenExpired, saveTokens, getTokens } from '../auth/tokens'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import clipboardWatcher from 'electron-clipboard-watcher'
 import icon from '../../resources/icon.png?asset'
-import auth_controller from '../auth/controller'
+// import auth_controller from '../auth/controller'
 import { autoUpdater } from 'electron-updater'
 import settings from 'electron-settings'
 import { join } from 'path'
-import fs from 'fs'
+// import fs from 'fs'
 
 const KeyboardListener = new GlobalKeyboardListener()
 
-async function doAuthLogin(): Promise<void> {
-  return auth_login()
-}
+// async function doAuthLogin(): Promise<void> {
+//   return auth_login()
+// }
 
-function hasTokens(): boolean {
-  return fs.existsSync(join(app.getPath('userData'), 'tokens.json'))
-}
+// function hasTokens(): boolean {
+//   return fs.existsSync(join(app.getPath('userData'), 'tokens.json'))
+// }
 
-async function doAuthFlow(): Promise<void> {
-  if (!hasTokens()) {
-    await doAuthLogin()
-    return
-  }
+// async function doAuthFlow(): Promise<void> {
+//   if (!hasTokens()) {
+//     await doAuthLogin()
+//     return
+//   }
 
-  const tokens = getTokens()
-  if (isAccessTokenExpired()) {
-    if (tokens?.refresh_token) {
-      const data = await refresh_token(tokens.refresh_token)
-      if (data) {
-        saveTokens(data)
-      } else {
-        await doAuthLogin()
-      }
-    } else {
-      await doAuthLogin()
-    }
-  }
-}
+//   const tokens = getTokens()
+//   if (isAccessTokenExpired()) {
+//     if (tokens?.refresh_token) {
+//       const data = await refresh_token(tokens.refresh_token)
+//       if (data) {
+//         saveTokens(data)
+//       } else {
+//         await doAuthLogin()
+//       }
+//     } else {
+//       await doAuthLogin()
+//     }
+//   }
+// }
 
 // async function doAuthFlow(): Promise<void> {
 //   if (!fs.existsSync(join(app.getPath('userData'), 'tokens.json'))) {
@@ -62,7 +62,7 @@ async function doAuthFlow(): Promise<void> {
 // }
 
 let mainWindow: BrowserWindow
-let auth_login: () => Promise<void>
+// let auth_login: () => Promise<void>
 function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 900,
@@ -92,22 +92,22 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  const first_run = settings.getSync('console') === undefined
+  // const first_run = settings.getSync('console') === undefined
 
-  auth_login = auth_controller(ipcMain, mainWindow)
-  mainWindow.webContents.on('did-finish-load', async () => {
-    doAuthFlow().then(async () => {
-      const tokens = getTokens()
-      if (!tokens) return
-      const catalog = (await get_catalog(tokens.access_token)) as {
-        result: { [key: string]: object }
-      }
-      if (!catalog) return
+  // auth_login = auth_controller(ipcMain, mainWindow)
+  // mainWindow.webContents.on('did-finish-load', async () => {
+  //   doAuthFlow().then(async () => {
+  //     const tokens = getTokens()
+  //     if (!tokens) return
+  //     const catalog = (await get_catalog(tokens.access_token)) as {
+  //       result: { [key: string]: object }
+  //     }
+  //     if (!catalog) return
 
-      mainWindow.webContents.send('auth-complete', first_run)
-      mainWindow.webContents.send('catalog', catalog.result)
-    })
-  })
+  //     mainWindow.webContents.send('auth-complete', first_run)
+  //     mainWindow.webContents.send('catalog', catalog.result)
+  //   })
+  // })
 }
 
 type PlayerData = {
@@ -232,38 +232,39 @@ app.whenReady().then(() => {
     onTextChange: (text: string) => {
       if (text.startsWith('ServerName - ')) {
         mainWindow.webContents.send('clipboard-loading')
-        const { serverName, parsedData } = parsePlayerData(text)
+        const { parsedData } = parsePlayerData(text)
+        mainWindow.webContents.send('player-data', parsedData)
 
-        doAuthFlow().then(async () => {
-          const tokens = getTokens()
-          if (!tokens) return
-          const data = await get_validated_players(tokens.access_token, parsedData, serverName)
-          if (!data) return
-          mainWindow.webContents.send('player-data', data[0].result.validated_players)
-          mainWindow.webContents.send('catalog', data[1].result)
-        })
+        // doAuthFlow().then(async () => {
+        //   const tokens = getTokens()
+        //   if (!tokens) return
+        //   const data = await get_validated_players(tokens.access_token, parsedData, serverName)
+        //   if (!data) return
+        //   mainWindow.webContents.send('player-data', data[0].result.validated_players)
+        //   mainWindow.webContents.send('catalog', data[1].result)
+        // })
       }
     }
   })
 
-  ipcMain.on('validate-user', async (_, data) => {
-    const { player_id, username } = data
-    const validation_data = [
-      {
-        playfab_id: player_id,
-        display_name: username
-      }
-    ]
+  // ipcMain.on('validate-user', async (_, data) => {
+  //   const { player_id, username } = data
+  //   const validation_data = [
+  //     {
+  //       playfab_id: player_id,
+  //       display_name: username
+  //     }
+  //   ]
 
-    doAuthFlow().then(async () => {
-      const tokens = getTokens()
-      if (!tokens) return
-      const data = await get_validated_players(tokens.access_token, validation_data, '')
-      if (!data) return
-      mainWindow.webContents.send('validation-result', data[0].result.validated_players)
-      mainWindow.webContents.send('catalog', data[1].result)
-    })
-  })
+  //   doAuthFlow().then(async () => {
+  //     const tokens = getTokens()
+  //     if (!tokens) return
+  //     const data = await get_validated_players(tokens.access_token, validation_data, '')
+  //     if (!data) return
+  //     mainWindow.webContents.send('validation-result', data[0].result.validated_players)
+  //     mainWindow.webContents.send('catalog', data[1].result)
+  //   })
+  // })
 
   ipcMain.on('command', async (event, command: string) => {
     command_queue.push({ event, command })
@@ -289,33 +290,33 @@ app.whenReady().then(() => {
   })
 
   // TODO: come back to this
-  ipcMain.on('ban-players', async (event, args) => {
-    doAuthFlow()
-      .then(async () => {
-        const tokens = getTokens()
-        if (!tokens) return
-        const { playfab_ids, ban_charges, ban_duration } = args
+  // ipcMain.on('ban-players', async (event, args) => {
+  //   doAuthFlow()
+  //     .then(async () => {
+  //       const tokens = getTokens()
+  //       if (!tokens) return
+  //       const { playfab_ids, ban_charges, ban_duration } = args
 
-        const response = (await ban_players(
-          tokens.access_token,
-          playfab_ids,
-          ban_charges,
-          ban_duration ? ban_duration : null
-        )) as { data: [{ result }, { result }]; message: string } | null
+  //       const response = (await ban_players(
+  //         tokens.access_token,
+  //         playfab_ids,
+  //         ban_charges,
+  //         ban_duration ? ban_duration : null
+  //       )) as { data: [{ result }, { result }]; message: string } | null
 
-        if (response) {
-          mainWindow.webContents.send('catalog', response.data[1].result)
-          return event.reply('ban-players-result', {
-            data: response.data[0].result,
-            message: response.message
-          })
-        } else
-          return event.reply('ban-players-result', { data: null, message: 'Failed to ban players' })
-      })
-      .catch(() =>
-        event.reply('ban-players-result', { data: null, message: 'Failed to ban players' })
-      )
-  })
+  //       if (response) {
+  //         mainWindow.webContents.send('catalog', response.data[1].result)
+  //         return event.reply('ban-players-result', {
+  //           data: response.data[0].result,
+  //           message: response.message
+  //         })
+  //       } else
+  //         return event.reply('ban-players-result', { data: null, message: 'Failed to ban players' })
+  //     })
+  //     .catch(() =>
+  //       event.reply('ban-players-result', { data: null, message: 'Failed to ban players' })
+  //     )
+  // })
 
   createWindow()
 

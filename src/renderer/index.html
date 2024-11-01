@@ -10,7 +10,9 @@
   <link rel="stylesheet" href="assets/base.css" />
 </head>
 
-<body class="pre-init">
+<!-- <body class="pre-init"> -->
+
+<body>
   <!-- TABLE CONTROLS -->
   <div id="table-controls">
     <div id="tc-left">
@@ -25,7 +27,7 @@
         data-tg-tour="Here displays the amount of players in the table.">Players
         (0)</p>
     </div>
-    <div id="tc-right">
+    <!-- <div id="tc-right">
       <input type="text" id="punish-global" type="text">
       <button id="punish-preset-button" data-tg-order="3" data-tg-title="Global Ban/Kick Catalogue"
         data-tg-tour="Here you can select ban reasons from the catalogue to apply in a global ban.">
@@ -34,17 +36,13 @@
             d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z" />
         </svg>
       </button>
-      <!-- <input type="text" id="punish-reason" type="text" placeholder="Ban Message"> -->
-      <!-- <input type="number" id="punish-duration" min="1" max="999999" placeholder="Duration" data-tg-order="4"
-        data-tg-title="Ban/Kick Duration"
-        data-tg-tour="Here you can enter a ban duration for local bans. Use hours, e.g. banning someone for '24' means they'll be banned for 1 day."> -->
       <input type="range" min="1" value="1" max="999999" id="punish-duration-slider" data-tg-order="4"
         data-tg-title="Global Ban Duration Slider"
         data-tg-tour="Here you can choose between the min and max ban times for your selected charges." />
       <input type="number" min="1" value="1" max="999999" id="punish-duration-label" data-tg-order="5"
         data-tg-title="Global Ban Duration Number"
         data-tg-tour="Here you can manually type the time instead of using the slider if you want." />
-    </div>
+    </div> -->
   </div>
 
   <!-- TABLE -->
@@ -63,8 +61,8 @@
       <div class="col" id="playfab">PlayFabPlayerID</div>
       <div class="col" id="actions-header"></div>
       <div id="header-sort">
-        <button id="table-sort-button" data-tg-order="8" data-tg-title="Header Sort"
-          data-tg-tour="Here you can sort the table in the following order (via Badges): Suspicous, Normal, Veteran, Admin"></button>
+        <!-- <button id="table-sort-button" data-tg-order="8" data-tg-title="Header Sort"
+          data-tg-tour="Here you can sort the table in the following order (via Badges): Suspicous, Normal, Veteran, Admin"></button> -->
       </div>
     </div>
     <div id="body">
@@ -141,12 +139,12 @@
         <p id="settings-console-label"></p>
         <button id="settings-tour-button">Redo Tour</button>
       </div>
-      <div id="settings-modal-validation">
+      <!-- <div id="settings-modal-validation">
         <input type="text" placeholder="Username (Optional)" id="validation-username">
         <input type="text" placeholder="PlayFabPlayerID" id="validation-playfab-id">
         <button id="validate-button">Validate</button>
         <div id="validation-output" class="table-additional-content"></div>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -169,7 +167,7 @@
       </button>
       <input type="text" placeholder="Reason" id="local-ban-reason">
       <input type="number" min="1" max="999999" placeholder="Duration" id="local-ban-duration">
-      <button id="local-ban-fill">Fill Reason and Duration with selected Catalog options</button>
+      <!-- <button id="local-ban-fill">Fill Reason and Duration with selected Catalog options</button> -->
       <button id="local-ban-submit">Ban</button>
     </div>
   </div>
@@ -186,7 +184,7 @@
         </svg>
       </button>
       <input type="text" placeholder="Reason" id="local-kick-reason">
-      <button id="local-kick-fill">Fill Reason with selected Catalog options</button>
+      <!-- <button id="local-kick-fill">Fill Reason with selected Catalog options</button> -->
       <button id="local-kick-submit">Kick</button>
     </div>
     <script type="module" src="./src/renderer.ts"></script>
